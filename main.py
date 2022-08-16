@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 API_TOKEN = config('TOKEN')
 PARSE_MODE = config('PARSE_MODE')
+GITHUB_TOKEN = config('GITHUB_TOKEN')
 
 bot = telebot.TeleBot(API_TOKEN)
 
