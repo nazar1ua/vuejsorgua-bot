@@ -1,7 +1,8 @@
+from base64 import b64decode
+from json import loads as parse_json, dumps as encode_json
 import telebot
 from decouple import config
-import requests
-from bs4 import BeautifulSoup
+from requests import get
 
 API_TOKEN = config('TOKEN')
 PARSE_MODE = config('PARSE_MODE')
@@ -15,28 +16,39 @@ def start(message):
 
 @bot.message_handler(commands=['glossary'])
 def glossary(message):
-    text = message.text.replace('/glossary ', '').replace('/glossary', '')
+    text = message.text.replace('/glossary@vuejsorgua_bot ', '').replace('/glossary ', '').replace('/glossary', '')
     response = ''
+    req = list(filter(None, text.split(' ')))
 
-    if (len(text.split()) > 1):
+    if (len(req) > 1):
         response = 'WIP'
-    elif (len(text.split()) == 1):
-        res = requests.get('https://github.com/vuejsorgua/docs/wiki/Глосарій')
-        data = BeautifulSoup(res.text, features='lxml')
-        wiki = data.find(id='wiki-body').text
+    elif (len(req) == 1):
+        res = get('https://api.github.com/repos/vuejsorgua/docs/contents/.vitepress/public/glossary.json', headers={
+            'Accept': 'application/vnd.github+json',
+            # 'Authorization': f'token {GITHUB_TOKEN}'
+        })
         resp = ''
-        for line in wiki.split('\n'):
-            if text.split()[0] in line:
-                resp += f"{line}\n"
         
+        translations = parse_json(b64decode(parse_json(res.text)['content']))['data']
+
+        filtered = []
+        string = ''
+        search = req[0]
+
+        if translations[0]['translation']:
+            for t in translations:
+                if search.lower() in t['original'] or search.upper() in t['original'] or search.capitalize() in t['original']:
+                    filtered.append(t)
+                    string += f"*{t['original']}*: {t['translation']}\n"
+        
+        resp = string
+
         if (len(resp) < 1):
             resp = 'За вашим запитом нічого не знайдено'
         response = resp
     else:
-        res = requests.get('https://github.com/vuejsorgua/docs/wiki/Глосарій')
-        data = BeautifulSoup(res.text, features='lxml')
-        response = data.find(id='wiki-body').text
+        response = 'WIP'
 
-    bot.send_message(message.chat.id, response, parse_mode='HTML')
+    bot.send_message(message.chat.id, response, parse_mode=PARSE_MODE)
 
 bot.polling(none_stop=True)
