@@ -26,7 +26,7 @@ def glossary(message):
         res = get('https://vuejs.org.ua/glossary.json')
         resp = ''
         
-        translations = parse_json(b64decode(parse_json(res.text)['content']))['data']
+        translations = parse_json(res.text)['data']
 
         filtered = []
         string = ''
