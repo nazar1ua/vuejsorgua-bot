@@ -23,10 +23,7 @@ def glossary(message):
     if (len(req) > 1):
         response = 'WIP'
     elif (len(req) == 1):
-        res = get('https://api.github.com/repos/vuejsorgua/docs/contents/.vitepress/public/glossary.json', headers={
-            'Accept': 'application/vnd.github+json',
-            # 'Authorization': f'token {GITHUB_TOKEN}'
-        })
+        res = get('https://vuejs.org.ua/glossary.json')
         resp = ''
         
         translations = parse_json(b64decode(parse_json(res.text)['content']))['data']
