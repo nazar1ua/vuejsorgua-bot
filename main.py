@@ -9,10 +9,6 @@ fpid = os.fork()
 if fpid != 0:
     sys.exit(0)
 
-while 1:
-    print('Bot is live')
-    time.sleep(5)
-
 API_TOKEN = config('TOKEN')
 PARSE_MODE = config('PARSE_MODE')
 GITHUB_TOKEN = config('GITHUB_TOKEN')
@@ -58,3 +54,7 @@ def glossary(message):
     bot.send_message(message.chat.id, response, parse_mode=PARSE_MODE)
 
 bot.polling(none_stop=True)
+
+while 1:
+    print('Bot is live')
+    time.sleep(5)
