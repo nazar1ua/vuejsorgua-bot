@@ -1,6 +1,6 @@
 from base64 import b64decode
 from json import loads as parse_json, dumps as encode_json
-import telebot, os, sys
+import telebot, os, sys, time
 from decouple import config
 from requests import get
 
@@ -12,7 +12,7 @@ if fpid != 0:
 while 1:
   if fpid != 0:
     sys.exit(0)
-  sleep(5)
+  time.sleep(5)
 
 API_TOKEN = config('TOKEN')
 PARSE_MODE = config('PARSE_MODE')
