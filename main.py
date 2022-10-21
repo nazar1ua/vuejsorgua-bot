@@ -11,7 +11,7 @@ if fpid != 0:
 
 while 1:
   if fpid != 0:
-    sys.exit(0)
+      sys.exit(0)
   time.sleep(5)
 
 API_TOKEN = config('TOKEN')
