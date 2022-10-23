@@ -1,5 +1,4 @@
 from json import loads as parse_json, dumps as encode_json
-from turtle import st
 import telebot, os, sys, time
 from decouple import config
 from requests import get
