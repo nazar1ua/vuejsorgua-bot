@@ -1,4 +1,5 @@
 from json import loads as parse_json, dumps as encode_json
+from turtle import st
 import telebot, os, sys, time
 from decouple import config
 from requests import get
@@ -7,7 +8,7 @@ from check_db import get_translations
 fpid = os.fork()
 
 f = open("pid.txt", "w")
-f.write(fpid)
+f.write(str(fpid))
 f.close()
 
 if fpid != 0:
