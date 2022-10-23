@@ -5,7 +5,7 @@ from db_driver import get_translations
 fpid = os.fork()
 
 f = open("pid.txt", "w")
-f.write(str(os.getpid()))
+f.write(f"{os.getpid()}\n")
 f.close()
 
 if fpid != 0:
