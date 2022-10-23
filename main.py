@@ -6,6 +6,10 @@ from check_db import get_translations
 
 fpid = os.fork()
 
+f = open("pid.txt", "w")
+f.write(fpid)
+f.close()
+
 if fpid != 0:
     sys.exit(0)
 
