@@ -1,12 +1,12 @@
-import telebot, os, sys, time
+import telebot, os#, sys, time
 from decouple import config
-from check_db import get_translations
+from db_driver import get_translations
 
 # fpid = os.fork()
 
-# f = open("pid.txt", "w")
-# f.write(str(fpid))
-# f.close()
+f = open("pid.txt", "w")
+f.write(str(os.getpid()))
+f.close()
 
 # if fpid != 0:
 #     sys.exit(0)
