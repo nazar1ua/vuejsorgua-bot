@@ -50,6 +50,20 @@ def g(message):
 
     bot.send_message(message.chat.id, response, parse_mode=PARSE_MODE)
 
+@bot.message_handler(commands=['add'])
+def add(message):
+    text = message.text.replace('/add@vuejsorgua_bot ', '').replace('/add ', '').replace('/add', '')
+    response = ''
+    req = list(filter(None, text.split(' ')))
+
+    bot.send_poll(message.chat.id, f"""{message.from_user.first_name} хоче додати переклад "{req[0]}" - "{req[1]}" """, ['Підтримую', 'Протестую'], is_anonymous=False)
+
+@bot.poll_answer_handler()
+def poll_answer_handler(poll_answer):
+    p = open("logs.txt", "a")
+    p.write(f"{poll_answer}\n")
+    p.close()
+
 bot.polling(none_stop=True)
 
 while 1:
