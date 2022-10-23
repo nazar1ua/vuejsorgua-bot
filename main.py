@@ -1,8 +1,8 @@
-from base64 import b64decode
 from json import loads as parse_json, dumps as encode_json
 import telebot, os, sys, time
 from decouple import config
 from requests import get
+from check_db import get_translations
 
 fpid = os.fork()
 
@@ -19,29 +19,24 @@ bot = telebot.TeleBot(API_TOKEN)
 def start(message):
     bot.send_message(message.chat.id, 'Вітаємо в боті *VueJS Ukraine*', parse_mode=PARSE_MODE)
 
-@bot.message_handler(commands=['glossary'])
-def glossary(message):
-    text = message.text.replace('/glossary@vuejsorgua_bot ', '').replace('/glossary ', '').replace('/glossary', '')
+@bot.message_handler(commands=['g'])
+def g(message):
+    text = message.text.replace('/g@vuejsorgua_bot ', '').replace('/g ', '').replace('/g', '')
     response = ''
     req = list(filter(None, text.split(' ')))
 
     if (len(req) > 1):
-        response = 'WIP'
+        response = 'Ця функція поки-що недоступна'
     elif (len(req) == 1):
-        res = get('https://vuejs.org.ua/glossary.json')
         resp = ''
-        
-        translations = parse_json(res.text)['data']
-
         filtered = []
         string = ''
         search = req[0]
 
-        if translations[0]['translation']:
-            for t in translations:
-                if search.lower() in t['original'] or search.upper() in t['original'] or search.capitalize() in t['original']:
-                    filtered.append(t)
-                    string += f"*{t['original']}*: {t['translation']}\n"
+        for t in get_translations():
+            if search.lower() in t[0] or search.upper() in t[0] or search.capitalize() in t[0]:
+                filtered.append(t)
+                string += f"*{t[0]}*: {t[1]}\n"
         
         resp = string
 
@@ -49,7 +44,7 @@ def glossary(message):
             resp = 'За вашим запитом нічого не знайдено'
         response = resp
     else:
-        response = 'WIP'
+        response = 'Ця функція поки-що недоступна'
 
     bot.send_message(message.chat.id, response, parse_mode=PARSE_MODE)
 
