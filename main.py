@@ -1,17 +1,15 @@
-from json import loads as parse_json, dumps as encode_json
 import telebot, os, sys, time
 from decouple import config
-from requests import get
 from check_db import get_translations
 
-fpid = os.fork()
+# fpid = os.fork()
 
-f = open("pid.txt", "w")
-f.write(str(fpid))
-f.close()
+# f = open("pid.txt", "w")
+# f.write(str(fpid))
+# f.close()
 
-if fpid != 0:
-    sys.exit(0)
+# if fpid != 0:
+#     sys.exit(0)
 
 API_TOKEN = config('TOKEN')
 PARSE_MODE = config('PARSE_MODE')
@@ -54,6 +52,6 @@ def g(message):
 
 bot.polling(none_stop=True)
 
-while 1:
-    print('Bot is live')
-    time.sleep(5)
+# while 1:
+#     print('Bot is live')
+#     time.sleep(5)
