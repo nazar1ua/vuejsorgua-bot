@@ -1,6 +1,6 @@
 import telebot, os, sys, time
 from decouple import config
-from db_driver import get_translations
+from db_driver import get_translations,add_pending_translation, check_pending_translation, voice
 
 fpid = os.fork()
 
@@ -55,14 +55,18 @@ def add(message):
     text = message.text.replace('/add@vuejsorgua_bot ', '').replace('/add ', '').replace('/add', '')
     response = ''
     req = list(filter(None, text.split(' ')))
-
-    bot.send_poll(message.chat.id, f"""{message.from_user.first_name} хоче додати переклад "{req[0]}" - "{req[1]}" """, ['Підтримую', 'Протестую'], is_anonymous=False)
+    if (len(req) != 2):
+        bot.send_message(message.chat.id, 'Дані введені неправильно', parse_mode=PARSE_MODE)
+    else:
+        m = bot.send_poll(message.chat.id, f"""{message.from_user.first_name} хоче додати переклад "{req[0]}" - "{req[1]}" """, ['Підтримую', 'Протестую'], is_anonymous=False)
+        add_pending_translation(m.poll.id, message.chat.id, req[0], req[1])
 
 @bot.poll_answer_handler()
 def poll_answer_handler(poll_answer):
-    p = open("logs.txt", "a")
-    p.write(f"{poll_answer}\n")
-    p.close()
+    if (check_pending_translation(poll_answer.poll_id) == False):
+        v = voice(poll_answer)
+        if (v['id'] != 0):
+            bot.send_message(v['id'], f'Переклад слова *{v["text"]}* одобрений та доданий в глосарій', parse_mode=PARSE_MODE)
 
 bot.polling(none_stop=True)
 

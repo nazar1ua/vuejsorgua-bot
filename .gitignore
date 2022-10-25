@@ -131,3 +131,6 @@ dmypy.json
 # logs
 logs.txt
 pid.txt
+
+# tests
+*test.py
