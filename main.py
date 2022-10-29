@@ -14,6 +14,7 @@ if fpid != 0:
 API_TOKEN = config('TOKEN')
 PARSE_MODE = config('PARSE_MODE')
 GITHUB_TOKEN = config('GITHUB_TOKEN')
+CHAT_ID = config('CHAT_ID')
 
 bot = telebot.TeleBot(API_TOKEN)
 
@@ -58,8 +59,11 @@ def add(message):
     if (len(req) != 2):
         bot.send_message(message.chat.id, 'Дані введені неправильно', parse_mode=PARSE_MODE)
     else:
-        m = bot.send_poll(message.chat.id, f"""{message.from_user.first_name} хоче додати переклад "{req[0]}" - "{req[1]}" """, ['Підтримую', 'Протестую'], is_anonymous=False)
-        add_pending_translation(m.poll.id, message.chat.id, req[0], req[1])
+        if (str(message.chat.id) != str(CHAT_ID)):
+            bot.send_message(message.chat.id, 'Створювати посилання можна тільки в [офіційній групі](https://t.me/vuejs_ukraine) *VueJS Translations UA*', parse_mode=PARSE_MODE)
+        else:
+            m = bot.send_poll(message.chat.id, f"""{message.from_user.first_name} хоче додати переклад "{req[0]}" - "{req[1]}" """, ['Підтримую', 'Протестую'], is_anonymous=False)
+            add_pending_translation(m.poll.id, message.chat.id, req[0], req[1])
 
 @bot.poll_answer_handler()
 def poll_answer_handler(poll_answer):
