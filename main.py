@@ -70,7 +70,7 @@ def poll_answer_handler(poll_answer):
     if (check_pending_translation(poll_answer.poll_id) == False):
         v = voice(poll_answer)
         if (v['id'] != 0):
-            bot.send_message(v['id'], f'Переклад слова *{v["text"]}* одобрений та доданий в глосарій', parse_mode=PARSE_MODE)
+            bot.send_message(v['id'], f'Переклад слова *{v["text"]}* схвалений та доданий в глосарій', parse_mode=PARSE_MODE)
 
 bot.polling(none_stop=True)
 
