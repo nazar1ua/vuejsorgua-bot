@@ -62,8 +62,8 @@ def add(message):
         if (str(message.chat.id) != str(CHAT_ID)):
             bot.send_message(message.chat.id, 'Створювати голосування можна тільки в [офіційній групі](https://t.me/vuejs_ukraine) *VueJS Translations UA*', parse_mode=PARSE_MODE)
         else:
-            m = bot.send_poll(message.chat.id, f"""{message.from_user.first_name} хоче додати переклад "{req[0]}" - "{req[1]}" """, ['Підтримую', 'Протестую'], is_anonymous=False)
-            add_pending_translation(m.poll.id, message.chat.id, req[0], req[1])
+            m = bot.send_poll(message.chat.id, f"""{message.from_user.first_name} хоче додати переклад "{req[0].replace('_', ' ')}" - "{req[1].replace('_', ' ')}" """, ['Підтримую', 'Протестую'], is_anonymous=False)
+            add_pending_translation(m.poll.id, message.chat.id, req[0].replace('_', ' '), req[1].replace('_', ' '))
 
 @bot.poll_answer_handler()
 def poll_answer_handler(poll_answer):
